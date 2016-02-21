@@ -37,7 +37,7 @@ def main_crawl():
 
 		soup = BeautifulSoup(r,"lxml")
 		content =  soup.find("div",{"id": "mw-content-text","class":"mw-content-ltr"})
-		links = content.find_all("a",href=True)
+		links = content.find_all("a",class_=lambda x: x != 'mw-redirect')
 
 		for link in links:
 			if wiki_regex.match(link['href']) and extension_scan(link['href']) == False:
@@ -62,15 +62,20 @@ def main_crawl():
 
 def download():
 	myfile = open('wiki.txt', 'r') #output file containing links
-        outfile = open('dump.txt','w') # output file dump in XML
+        
 	for line in myfile:
 		sleep(1)
-                link = line.replace('/wiki','/wiki/Special:Export')
-		link = prefix+line
+		link = prefix+line.replace('/wiki','/wiki/Special:Export')
 		r = urllib.urlopen(link).read()
+	 	soup = BeautifulSoup(r,"lxml")
+		outfile = open('Dump/'+soup.title.string,'w') # output file dump in XML
 		outfile.write(r)
-	outfile.close()
+		outfile.close()
+		print link
+	
 	myfile.close()
+
+
 
 
 main_crawl()
