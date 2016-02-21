@@ -11,8 +11,9 @@ def stripper(filepath):
 	infile = open(filepath,'r')
 	content = infile.read()
 	infile.close()
-	content = re.sub(re.compile('(&lt;.*?&gt;)|({{.*?}})|(==+.*?===*)|(\[\[(.+):.*?\]\])|(\[http:.*?\])',re.MULTILINE),'',content)
 	content = re.sub(r'\[\[Category:(.*)?\]\]',r"<category>\1</category>",content)
+	content = re.sub(re.compile('(&lt;.*?&gt;)|({{.*?}})|(==+.*?===*)|(\[\[(.+):.*?\]\])|(\[http:.*?\])',re.MULTILINE),'',content)
+
 	content = re.sub(re.compile('{+.*?}+',re.MULTILINE|re.DOTALL),'',content)
 	content = re.sub(re.compile("\(+|\)+|''+|\[+|\]+",re.MULTILINE),'',content)
 	content = re.sub(re.compile('\n+',re.MULTILINE),'\n',content)
