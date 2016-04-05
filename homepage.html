@@ -1,0 +1,29 @@
+<html>
+<link rel="stylesheet" type="text/css" href="styles/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src = "js/displayresults.js"></script>
+<title>Wikipedia Search</title>
+
+<body>
+<h1>Wikipedia Search</h1>
+ <form id = "sbox">
+  <input type="text" id="inputtext" value="">
+  <input type="button" id ="searchbutton" value="Go">
+</form> 
+
+<p id = "numresults"> </p>
+<p id = "searchresults"> </p>
+
+    
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#searchbutton').click(function() {
+      displayresults($('#inputtext').val());
+    });
+});
+</script>
+</body>
+
+
+</html>

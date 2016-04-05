@@ -1,0 +1,22 @@
+h1,form {
+    color: black;
+    font-family: calibri;
+    font-size: 200%;
+    text-align: center;
+    
+}
+#inputtext {
+    width: 500px;
+}
+#searchresults{
+   color: black;
+   font-family: Arial, Helvetica, sans-serif;
+   text-align: left;
+}
+#numresults{
+    color: black;
+    font-family: Calibri;
+    font-style: 
+    font-size: 100%;
+    text-align: right;
+}
