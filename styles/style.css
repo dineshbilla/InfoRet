@@ -1,18 +1,57 @@
-h1,form {
+h1,form{
     color: black;
     font-family: calibri;
     font-size: 200%;
     text-align: center;
     
 }
+
 #inputtext {
     width: 500px;
 }
+#numresults,#facets{
+    font-weight: bold; 
+    font-style: italic;
+
+}
+
+#btitle,#bcontent,#bcategory{
+    width: 40px;
+}
+#edit-search{
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    text-align: left
+}
+
+
 #searchresults{
    color: black;
    font-family: Arial, Helvetica, sans-serif;
    text-align: left;
 }
+
+.container {
+   height: auto;
+   overflow: hidden;
+}
+
+.left {
+    background: mintcream;
+    position: absolute;
+    left: 0px;
+    width: 25%;
+}
+    
+.right {
+    background: ghostwhite;
+    position: absolute;
+    right: 0px;
+    width: 75%;
+}
+
+
 #numresults{
     color: black;
     font-family: Calibri;

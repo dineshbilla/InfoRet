@@ -1,28 +1,47 @@
 <html>
 <link rel="stylesheet" type="text/css" href="styles/style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-<script src = "js/displayresults.js"></script>
+<script src="js/displayresults.js"></script>
 <title>Wikipedia Search</title>
 
 <body>
-<h1>Wikipedia Search</h1>
- <form id = "sbox">
-  <input type="text" id="inputtext" value="">
-  <input type="button" id ="searchbutton" value="Go">
-</form> 
+  <h1>Wikipedia Search</h1>
+  <form id="sbox">
+    <input type="text" id="inputtext" value="">
+    <input type="button" id="searchbutton" value="Go">
+    <br>
 
-<p id = "numresults"> </p>
-<p id = "searchresults"> </p>
+  </form>
 
-    
+  <p id="numresults"> </p>
 
-<script type="text/javascript">
-$(document).ready(function() {
+  <div class="container">
+    <div class="right">
+      <p id="searchresults"> </p>
+    </div>
+    <div class="left">
+      <form id = "edit-search">
+        <b><i>Boosting  <br> <br>
+        Title: <input type="text" id="btitle" value=""> 
+        Content: <input type="text" id="bcontent" value=""> 
+        Category: <input type="text" id="bcategory" value="">
+        </i></b> 
+      </form>
+
+      <p id="facets"> </p>
+    </div>
+  </div>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
     $('#searchbutton').click(function() {
-      displayresults($('#inputtext').val());
+      displayresults($('#inputtext').val(),$('#btitle').val(),$('#bcontent').val(),$('#bcategory').val());
     });
 });
-</script>
+  </script>
 </body>
 
 
