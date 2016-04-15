@@ -1,6 +1,6 @@
 h1,form{
     color: black;
-    font-family: calibri;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 200%;
     text-align: center;
     
@@ -9,10 +9,14 @@ h1,form{
 #inputtext {
     width: 500px;
 }
-#numresults,#facets{
+#numresults{
     font-weight: bold; 
     font-style: italic;
-
+}
+#facets{
+    color:blue;
+    font-style:italic;
+    font-weight: bold; 
 }
 
 #btitle,#bcontent,#bcategory{
@@ -24,7 +28,6 @@ h1,form{
     font-size: 100%;
     text-align: left
 }
-
 
 #searchresults{
    color: black;
@@ -58,4 +61,23 @@ h1,form{
     font-style: 
     font-size: 100%;
     text-align: right;
+}
+a:link {
+    text-decoration: none;
+    color: blue;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+.mlt{
+    color:blue;
 }
