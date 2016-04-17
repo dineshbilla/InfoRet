@@ -42,7 +42,7 @@ function filterQuery(category) {
     var rblock = document.getElementById("searchresults");
     var docArray = queryresults.response.docs;
     var ndocs = 0;
-    $.each(docArray, function(key, value) {
+    $.each(docArray, function (key, value) {
         if (category && $.inArray(category, value.cat) == -1) return true;
         ndocs++;
         var searchresult = document.createElement('p');
@@ -56,7 +56,7 @@ function filterQuery(category) {
         morelikethislink.textContent = "more like this";
         morelikethislink.id = value["id"];
         morelikethislink.className = "mlt";
-        morelikethislink.addEventListener("click", function() {
+        morelikethislink.addEventListener("click", function () {
             displayresults("", "", "", "", this.id);
         }, true);
 
@@ -85,6 +85,8 @@ function filterQuery(category) {
 function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) {
     document.getElementById("searchresults").innerHTML = "";
     document.getElementById("facets").innerHTML = "";
+    document.getElementById("spellcheck").innerHTML = "";
+
     // document.getElementById("numresults").innerHTML = "";
 
     var url = buildquery(inputtext, btitle, bcontent, bcategory, morelikethisid);
@@ -95,15 +97,17 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
         dataType: 'JSONP',
         jsonpCallback: 'callback',
         crossDomain: true
-    }).done(function(data) {
+    }).done(function (data) {
         queryresults = data;
         document.getElementById("numresults").innerHTML = "Number of documents found: " + queryresults.response.numFound;
 
         var rblock = document.getElementById("searchresults");
         rblock.appendChild(document.createElement("br"));
 
+
+
         // display the results --> title and text summary
-        $.each(queryresults.response.docs, function(key, value) {
+        $.each(queryresults.response.docs, function (key, value) {
             //console.log(value["title"]);
             var searchresult = document.createElement('p');
 
@@ -117,16 +121,14 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
             morelikethislink.textContent = "more like this";
             morelikethislink.id = value["id"];
             morelikethislink.className = "mlt";
-            morelikethislink.addEventListener("click", function() {
+            morelikethislink.addEventListener("click", function () {
                 displayresults("", "", "", "", this.id);
             }, true);
 
             heading.appendChild(titlelink);
-            heading.appendChild(document.createElement("br"));
             heading.appendChild(morelikethislink);
 
             var summary = document.createElement('p');
-            // summary.style.fontWeight = "600";
             if (value["text"].length > 300) {
                 summary.innerHTML = value["text"].substr(0, 300);
             } else {
@@ -134,13 +136,9 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
             }
 
             searchresult.appendChild(heading);
-            // searchresult.appendChild(document.createElement("br"));
             searchresult.appendChild(summary);
-            // searchresult.appendChild(document.createElement("br"));
-
             rblock.appendChild(searchresult);
-            // document.getElementById("searchresults").innerHTML += value["title"];
-            // document.getElementById("searchresults").appendChild(document.createElement("br"));
+
 
         });
 
@@ -150,19 +148,16 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
         var facetblock = document.getElementById("facets");
 
         var headingtext = document.createElement("p");
-        headingtext.innerHTML = "Top Categories";
-        headingtext.style.fontStyle = "bold";
-
+        headingtext.innerHTML = "<b id = 'blacktext'> Top Categories \b";
         facetblock.appendChild(headingtext);
 
         while (index < facetArray.length && index < 20) {
-
+            if (facetArray[index + 1] == 0) break;
             var link = document.createElement('a');
             link.className = "link"
             link.textContent = facetArray[index] + " (" + facetArray[index + 1] + ") ";
             link.id = facetArray[index];
-            // link.href = "link";
-            link.addEventListener("click", function() {
+            link.addEventListener("click", function () {
                 filterQuery(this.id);
             }, true);
 
@@ -174,11 +169,32 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
         facetblock.appendChild(document.createElement("br"));
         var link = document.createElement('a');
         link.textContent = "Clear Selection";
-        link.addEventListener("click", function() {
+        link.addEventListener("click", function () {
             filterQuery("");
         }, true);
         facetblock.appendChild(link);
         facetblock.appendChild(document.createElement("br"));
+
+
+        // spellcheck suggestions
+        if (queryresults.spellcheck.suggestions.length > 0) {
+            var suggest = document.getElementById("spellcheck");
+            suggest.innerHTML = "<b id = 'blacktext'> Do you mean: \b";
+            var suggestions = queryresults.spellcheck.suggestions[1].suggestion;
+
+            for (var ix = 0; ix < suggestions.length; ix++) {
+                var clink = document.createElement('a');
+                clink.textContent = suggestions[ix]+" ";
+                clink.id = suggestions[ix];
+                clink.className = "spellcheck";
+                clink.addEventListener("click", function () {
+                    document.getElementById("inputtext").value = this.id;
+                    displayresults(this.id, btitle, bcontent, bcategory, "");
+                }, true);
+                suggest.appendChild(clink);
+                //suggest.innerHTML += " ";
+            }
+        }
     });
 
 }

@@ -13,19 +13,20 @@
 
   </form>
 
-  <p id="numresults"> </p>
+  <div id="spellcheck"> </div>
 
   <div class="container">
     <div class="right">
+      <p id="numresults"> </p>
       <p id="searchresults"> </p>
     </div>
     <div class="left">
-      <form id = "edit-search">
-        <b><i>Boosting  <br> <br>
+      <form id="edit-search">
+        <b>------------------------Boosting------------------------ <br> <br>
         Title: <input type="text" id="btitle" value=""> 
         Content: <input type="text" id="bcontent" value=""> 
         Category: <input type="text" id="bcategory" value="">
-        </i></b> 
+        </b>
       </form>
 
       <p id="facets"> </p>
@@ -40,6 +41,8 @@
     $('#searchbutton').click(function() {
       displayresults($('#inputtext').val(),$('#btitle').val(),$('#bcontent').val(),$('#bcategory').val(),"");
     });
+    $('#inputtext').onkeyup = function(e){ if(e.keyCode == 13){ alert("Here"); } }
+
 });
   </script>
 </body>
