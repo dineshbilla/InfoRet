@@ -1,11 +1,38 @@
 
 var queryresults;
 
+function buildsummary(value) {
+    var summary = document.createElement('p');
+    summary.innerHTML = "";
+    var rx = new RegExp("<b>",'g');
+    var hlight = queryresults.highlighting[value["id"]]["text"][0];
+    var first = hlight.search("<b>"), last = hlight.lastIndexOf("</b>");
+    var unedit_hlight = hlight.replace(rx,"<b id = 'hlight'>");
+    
+    hlight = hlight.slice(first,last+4);
+    var found_hlight = hlight.replace(rx,"<b id = 'hlight'>");
+    var find_hlight = hlight.replace("<b>", ""); find_hlight = find_hlight.replace("</b>", "");
+    
+    var txt = value["text"].replace(find_hlight,found_hlight);
+    var lines = txt.split('\n');
+    for(var ix = 0;ix<lines.length;ix++){
+        summary.innerHTML += lines[ix];
+        if(summary.innerHTML.length > 400){
+            if(summary.innerHTML.search("<b") == -1){
+                summary.innerHTML += ".......";
+                summary.innerHTML += unedit_hlight;
+            }
+            return summary;
+        }
+        
+    }
+}
+
 function buildquery(inputtext, btitle, bcontent, bcategory, morelikethisid) {
 
     if (morelikethisid) {
         var url = "http://localhost:8983/solr/solrpedia/select?q=%7B!mlt+qf%3Dtext+mintf%3D2+mindf%3D2%7D" + morelikethisid;
-        url += "&fl=title+text+cat+id&rows=200&wt=json&json.wrf=callback&indent=true&facet=true&facet.field=cat";
+        url += "&fl=title+text+cat+id&rows=30&wt=json&json.wrf=callback&indent=true&facet=true&facet.field=cat";
         return url;
     }
 
@@ -33,7 +60,7 @@ function buildquery(inputtext, btitle, bcontent, bcategory, morelikethisid) {
             url += "cat^" + bcategory;
         }
     }
-    url += "&fl=title+text+cat+id&rows=1000&wt=json&json.wrf=callback&indent=true&facet=true&facet.field=cat";
+    url += "&fl=title+text+cat+id&rows=30&wt=json&json.wrf=callback&indent=true&facet=true&facet.field=cat";
     return url;
 }
 
@@ -64,13 +91,7 @@ function filterQuery(category) {
         heading.appendChild(document.createElement("br"));
         heading.appendChild(morelikethislink);
 
-        var summary = document.createElement('p');
-        // summary.style.fontWeight = "600";
-        if (value["text"].length > 300) {
-            summary.innerHTML = value["text"].substr(0, 300);
-        } else {
-            summary.innerHTML = value["text"];
-        }
+        var summary = buildsummary(value);
 
         searchresult.appendChild(heading);
         searchresult.appendChild(summary);
@@ -128,12 +149,7 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
             heading.appendChild(titlelink);
             heading.appendChild(morelikethislink);
 
-            var summary = document.createElement('p');
-            if (value["text"].length > 300) {
-                summary.innerHTML = value["text"].substr(0, 300);
-            } else {
-                summary.innerHTML = value["text"];
-            }
+            var summary = buildsummary(value);
 
             searchresult.appendChild(heading);
             searchresult.appendChild(summary);
@@ -184,7 +200,7 @@ function displayresults(inputtext, btitle, bcontent, bcategory, morelikethisid) 
 
             for (var ix = 0; ix < suggestions.length; ix++) {
                 var clink = document.createElement('a');
-                clink.textContent = suggestions[ix]+" ";
+                clink.textContent = suggestions[ix] + " ";
                 clink.id = suggestions[ix];
                 clink.className = "spellcheck";
                 clink.addEventListener("click", function () {
