@@ -4,28 +4,37 @@ var queryresults;
 function buildsummary(value) {
     var summary = document.createElement('p');
     summary.innerHTML = "";
-    var rx = new RegExp("<b>",'g');
+    var rx = new RegExp("<b>", 'g');
+    var bold_tag = new RegExp("</b>", 'g');
+
+    if (!queryresults.highlighting[value["id"]]["text"]) {
+        var lines = value["text"].split('\n');
+        for (var ix = 0; ix < lines.length && summary.innerHTML.length < 400; ix++) {
+            summary.innerHTML += lines[ix];
+        }
+        return summary;
+    }
     var hlight = queryresults.highlighting[value["id"]]["text"][0];
     var first = hlight.search("<b>"), last = hlight.lastIndexOf("</b>");
-    var unedit_hlight = hlight.replace(rx,"<b id = 'hlight'>");
-    
-    hlight = hlight.slice(first,last+4);
-    var found_hlight = hlight.replace(rx,"<b id = 'hlight'>");
-    var find_hlight = hlight.replace("<b>", ""); find_hlight = find_hlight.replace("</b>", "");
-    
-    var txt = value["text"].replace(find_hlight,found_hlight);
+    var unedit_hlight = hlight.replace(rx, "<b id = 'hlight'>");
+
+    hlight = hlight.slice(first, last + 4);
+    var found_hlight = hlight.replace(rx, "<b id = 'hlight'>");
+    var find_hlight = hlight.replace(rx, ""); find_hlight = find_hlight.replace(bold_tag, "");
+
+    var txt = value["text"].replace(find_hlight, found_hlight);
     var lines = txt.split('\n');
-    for(var ix = 0;ix<lines.length;ix++){
+    for (var ix = 0; ix < lines.length; ix++) {
         summary.innerHTML += lines[ix];
-        if(summary.innerHTML.length > 400){
-            if(summary.innerHTML.search("<b") == -1){
+        if (summary.innerHTML.length > 400) {
+            if (summary.innerHTML.search("<b") == -1) {
                 summary.innerHTML += ".......";
                 summary.innerHTML += unedit_hlight;
             }
             return summary;
         }
-        
     }
+    return summary;
 }
 
 function buildquery(inputtext, btitle, bcontent, bcategory, morelikethisid) {
